@@ -24,7 +24,7 @@ pipeline {
         ]) {
           sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
         }
-        sh 'docker push $IMAGE_NAME:$IMAGE_TAG'
+        sh 'docker push $IMG_NAME:$IMG_TAG'
       }
     }
     stage('Deploy') {
