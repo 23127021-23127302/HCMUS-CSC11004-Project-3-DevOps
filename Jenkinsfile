@@ -11,6 +11,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
+        deleteDir()
         checkout scm
         sh 'docker build -t $IMG_NAME:$IMG_TAG .'
       }
