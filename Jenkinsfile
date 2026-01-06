@@ -32,8 +32,9 @@ pipeline {
         sh '''
           docker stop app || true
           docker rm app || true
-          docker run -d --name app -p 80:80 $IMAGE_NAME:$IMAGE_TAG
+          docker run -d --name app -p 80:80 $IMG_NAME:$IMG_TAG
         '''
+        // this is what i get for sleeping at 4am bruv
       }
     }
   }
