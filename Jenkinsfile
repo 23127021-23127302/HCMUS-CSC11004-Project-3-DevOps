@@ -3,15 +3,28 @@ pipeline {
   options {
     skipDefaultCheckout(true)
   }
+  environment {
+    IMG_NAME = "2312702123127302/dummy-app"
+    IMG_TAG = "latest"
+  }
   stages {
     stage('Build') {
       steps {
-        sh 'docker build -t test-image .'
+        sh 'docker build -t $IMG_NAME:$IMG_TAG .'
       }
     }
-    stage('Run') {
+    stage('Push') {
       steps {
-        sh 'docker run --rm test-image'
+        withCredentials([
+          usernamePassword(
+            credentialsId: 'dockerhub-creds',
+            usernameVariable: 'DOCKER_USER',
+            passwordVariable: 'DOCKER_PASS'
+          )
+        ]) {
+          sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+        }
+        sh 'docker push $IMAGE_NAME:$IMAGE_TAG'
       }
     }
     stage('Deploy') {
@@ -19,7 +32,7 @@ pipeline {
         sh '''
           docker stop app || true
           docker rm app || true
-          docker run -d --name app -p 80:80 test-image
+          docker run -d --name app -p 80:80 $IMAGE_NAME:$IMAGE_TAG
         '''
       }
     }
