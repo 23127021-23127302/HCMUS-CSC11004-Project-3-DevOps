@@ -4,6 +4,9 @@ pipeline {
     skipDefaultCheckout(true)
   // i had to add this or it breaks for some reason now it breaks cuz its here :sob:
   }
+  triggers {
+        githubPush()
+  }
   environment {
     IMG_NAME = "2312702123127302/dummy-app"
     IMG_TAG = "latest"
